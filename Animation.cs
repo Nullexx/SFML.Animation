@@ -13,12 +13,11 @@ namespace SFML.Animation
         private int _counter = 0;
         private Texture _rectTexture;
         private Sprite _rectSprite;
-        private bool isPlay = true;
+        
 
         public Sprite[] Frames;
         public Vector2f Position = new Vector2f(0, 0);
         public int CurrentFrame = 0;
-        public bool isLoop = false;
         public int Speed = 100;
         
         public Animation(RenderWindow Window, Sprite SpriteSheet, int FrameWidth, int FrameHeight) 
@@ -61,61 +60,34 @@ namespace SFML.Animation
 
         }
 
-        public void Run() 
+        public void Run()
+        { 
+            for (CurrentFrame = 0; CurrentFrame < Frames.Length; CurrentFrame++) 
+            {
+                Frames[CurrentFrame].Position = Position;
+                _window.DispatchEvents();
+                _window.Clear();
+                _window.Draw(Frames[CurrentFrame]);
+                _window.Display();
+                Thread.Sleep(Speed);
+            }
+            return;
+        }
+        public void Run(int StartFrame, int EndFrame)
         {
-                
-                if (isLoop)
-                {
-                    while (isPlay)
-                    {
-                    if (CurrentFrame < Frames.Length)
-                    {
-                        Frames[CurrentFrame].Position = Position;
-                        _window.DispatchEvents();
-                        _window.Clear();
-                        _window.Draw(Frames[CurrentFrame]);
-                        _window.Display();
-                        ++CurrentFrame;
-                        Thread.Sleep(Speed);
-                    }
-                    else if (!isPlay) 
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        CurrentFrame = 0;
-                    }
-                        
-                    }
-                }
-                else 
-                {
-                    while (isPlay) 
-                    {
-                    if (CurrentFrame < Frames.Length)
-                    {
-                        Frames[CurrentFrame].Position = Position;
-                        _window.DispatchEvents();
-                        _window.Clear();
-                        _window.Draw(Frames[CurrentFrame]);
-                        _window.Display();
-                        ++CurrentFrame;
-                        Thread.Sleep(Speed);
-                    }
-                    else if(!isPlay)
-                    {
-                        break;
-                    }
-                    }
-                }
-            
+            for (int CurrentFrame = StartFrame; CurrentFrame < EndFrame; CurrentFrame++)
+            {
+                Frames[CurrentFrame].Position = Position;
+                _window.DispatchEvents();
+                _window.Clear();
+                _window.Draw(Frames[CurrentFrame]);
+                _window.Display();
+                Thread.Sleep(Speed);
+            }
+            return;
         }
 
-        public void Stop() 
-        {
-            isPlay = false;
-        }
+
 
 
 
